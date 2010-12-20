@@ -80,10 +80,13 @@
 				// Insert canvas and remove meter.
 				$(this).before(canvas)
 				       .hide();
+					   
+				// EXCANVAS
+				if (typeof(G_vmlCanvasManager) != 'undefined')
+					canvas = G_vmlCanvasManager.initElement(canvas);
 			
 				// Drawing
 				var context = canvas.getContext("2d");
-			
 			
 				// Set min and max rotation angle
 				var minValueRotationAngle = 
@@ -169,28 +172,28 @@
 					// image needle
 					context.drawImage(img, 
 						0, settings['height'] + 1,  // sx, sy
-						//(settings['width'] * 2), settings['height'],  // sh, sh
-						(largestDimension * 2), largestDimension,  // sh, sh
+						//(settings['width'] * 2), settings['height'],  // sw, sh
+						(largestDimension * 2), largestDimension,  // sw, sh
 						0-largestDimension, 0-(largestDimension/2),  //dx, dy
 						(largestDimension * 2), largestDimension  // dw, dh
 					);
 				}
 			
+				// reset all transformations
+				context.rotate(0-currentValueRotationAngle);
+				context.translate(0-pointerRotationPointX, 0-pointerRotationPointY); 
+				
 				// Draw middle bit
 				if (settings['drawSpindle'] && !settings['image']) {
 					context.fillStyle = settings['spindleColor'];
 					context.strokeStyle = settings['spindleOutlineColor'];
 					context.lineWidth = 1;
 					context.beginPath();
-					context.arc(0, 0, (smallestDimension) / 12, 0, Math.PI * 2, false);
+					context.arc(pointerRotationPointX, pointerRotationPointY, (smallestDimension) / 12, 0, Math.PI * 2, false);
 					context.closePath();
 					context.fill();
 					context.stroke();
 				} else if (settings['image']) {
-					// reset all transformations
-					context.rotate(0-currentValueRotationAngle);
-					context.translate(0-pointerRotationPointX, 0-pointerRotationPointY); 
-					
 					// draw overlay
 					context.drawImage(img, settings['width'], 0, settings['width'], settings['height'], 0, 0, settings['width'], settings['height']);
 				}

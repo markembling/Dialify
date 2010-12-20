@@ -39,6 +39,18 @@ The dial will use the defaults for any unspecified options.
 The examples folder contains some practical demonstrations of various options.
 
 
+Browser Support
+---------------
+
+Dialify should work in all browsers supporting the HTML5 canvas API. To make it 
+work in IE 7/8, the ExplorerCanvas library will need to be used (http://code.google.com/p/explorercanvas/).
+Unfortunately, there are some problems concerning rotation of images, so I have 
+provided a version patched using http://dev.sencha.com/playpen/tm/excanvas-patch/.
+
+This version should work correctly, and can be found in the lib folder. The examples 
+make use of this to ensure they work in IE.
+
+
 Options
 -------
 

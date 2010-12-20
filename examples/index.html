@@ -7,6 +7,11 @@
 	<link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="standard.css" type="text/css" />
 	
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="../lib/excanvas.js"></script>
+	<![endif]-->
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
 	<script src="../src/jquery.dialify.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -65,12 +70,12 @@
 		</header>
 		
 		<h2>Defaults</h2>
-		<p>
+		<div>
 			<meter class="demo1" value="0" min="0" max="100"></meter>
 			<meter class="demo1" value="25" min="0" max="100"></meter>
 			<meter class="demo1" value="50" min="0" max="100"></meter>
 			<meter class="demo1" value="100" min="0" max="100"></meter>
-		</p>
+		</div>
 		<div id="demo1-code">
 			<pre><code>&lt;meter class="demo1" value="0" min="0" max="100"&gt;&lt;/meter&gt;
 &lt;meter class="demo1" value="25" min="0" max="100"&gt;&lt;/meter&gt;
@@ -80,12 +85,12 @@
 		</div>
 
 		<h2>No Dial Face</h2>
-		<p>
+		<div>
 			<meter class="demo2" value="0" min="0" max="10"></meter>
 			<meter class="demo2" value="5" min="0" max="10"></meter>
 			<meter class="demo2" value="8" min="0" max="10"></meter>
 			<meter class="demo2" value="10" min="0" max="10"></meter>
-		</p>
+		</div>
 		<div id="demo2-code">
 			<pre><code>&lt;meter class="demo2" value="0" min="0" max="10"&gt;&lt;/meter&gt;
 &lt;meter class="demo2" value="5" min="0" max="10"&gt;&lt;/meter&gt;
@@ -95,12 +100,12 @@
 		</div>
 
 		<h2>Custom Canvas Size</h2>
-		<p>
+		<div>
 			<meter class="demo3" value="0" min="0" max="12"></meter>
 			<meter class="demo3" value="2" min="0" max="12"></meter>
 			<meter class="demo3" value="6" min="0" max="12"></meter>
 			<meter class="demo3" value="12" min="0" max="12"></meter>
-		</p>
+		</div>
 		<div id="demo3-code">
 			<pre><code>&lt;meter class="demo3" value="0" min="0" max="12">&lt;/meter&gt;
 &lt;meter class="demo3" value="2" min="0" max="12"&gt;&lt;/meter&gt;
@@ -110,12 +115,12 @@
 		</div>
 
 		<h2>Custom Min/Max Angles</h2>
-		<p>
+		<div>
 			<meter class="demo4" value="5" min="5" max="15"></meter>
 			<meter class="demo4" value="10" min="5" max="15"></meter>
 			<meter class="demo4" value="12" min="5" max="15"></meter>
 			<meter class="demo4" value="15" min="5" max="15"></meter>
-		</p>
+		</div>
 		<div id="demo4-code">
 			<pre><code>&lt;meter class="demo4" value="5" min="5" max="15"&gt;&lt;/meter&gt;
 &lt;meter class="demo4" value="10" min="5" max="15"&gt;&lt;/meter&gt;
@@ -127,12 +132,12 @@
 		</div>
 
 		<h2>Custom Pointer Rotation Point, Pointer Length, Scale Arc Radius</h2>
-		<p>
+		<div>
 			<meter class="demo5" value="0" min="0" max="10"></meter>
 			<meter class="demo5" value="2" min="0" max="10"></meter>
 			<meter class="demo5" value="5" min="0" max="10"></meter>
 			<meter class="demo5" value="10" min="0" max="10"></meter>
-		</p>
+		</div>
 		<div id="demo4-code">
 			<pre><code>&lt;meter class="demo5" value="0" min="0" max="10"&gt;&lt;/meter&gt;
 &lt;meter class="demo5" value="2" min="0" max="10"&gt;&lt;/meter&gt;
@@ -146,12 +151,12 @@
 		</div>
 
 		<h2>No Spindle, Custom Class Applied to Canvas Elements</h2>
-		<p>
+		<div>
 			<meter class="demo6" value="0" min="0" max="10"></meter>
 			<meter class="demo6" value="5" min="0" max="10"></meter>
 			<meter class="demo6" value="9" min="0" max="10"></meter>
 			<meter class="demo6" value="10" min="0" max="10"></meter>
-		</p>
+		</div>
 		<div id="demo6-code">
 			<pre><code>&lt;meter class="demo6" value="0" min="0" max="10"&gt;&lt;/meter&gt;
 &lt;meter class="demo6" value="5" min="0" max="10"&gt;&lt;/meter&gt;
@@ -164,12 +169,12 @@
 		</div>
 
 		<h2>Custom Colours</h2>
-		<p>
+		<div>
 			<meter class="demo7" value="0" min="0" max="10"></meter>
 			<meter class="demo7" value="4" min="0" max="10"></meter>
 			<meter class="demo7" value="5" min="0" max="10"></meter>
 			<meter class="demo7" value="10" min="0" max="10"></meter>
-		</p>
+		</div>
 		<div id="demo7-code">
 			<pre><code>&lt;meter class="demo7" value="0" min="0" max="10"&gt;&lt;/meter&gt;
 &lt;meter class="demo7" value="4" min="0" max="10"&gt;&lt;/meter&gt;
@@ -186,12 +191,12 @@
 		</div>
 
 		<h2>Render Using Custom Image</h2>
-		<p>
+		<div>
 			<meter class="demo8" value="0" min="0" max="10"></meter>
 			<meter class="demo8" value="5" min="0" max="10"></meter>
 			<meter class="demo8" value="7" min="0" max="10"></meter>
 			<meter class="demo8" value="10" min="0" max="10"></meter>
-		</p>
+		</div>
 		<div id="demo8-code">
 			<pre><code>&lt;meter class="demo8" value="0" min="0" max="10"&gt;&lt;/meter&gt;
 &lt;meter class="demo8" value="5" min="0" max="10"&gt;&lt;/meter&gt;
