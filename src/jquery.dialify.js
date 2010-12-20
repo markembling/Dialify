@@ -44,7 +44,7 @@
 		if (settings['image']) {
 			var elements = this;
 			var img = new Image();
-			img.onload = function(){ process(elements, img); }
+			$(img).load(function(){ process(elements, img); });
 			img.src = settings['image'];
 		} else {
 			process(this);
