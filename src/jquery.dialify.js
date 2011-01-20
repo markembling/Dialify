@@ -53,6 +53,95 @@
 		return toReturn;
 		
 		
+		// functions to do stuff
+		function insertCanvas(element, settings) {
+			// Create canvas
+			canvas = document.createElement('canvas');
+			canvas.setAttribute('width', settings['width']);
+			canvas.setAttribute('height', settings['height']);
+			canvas.className = settings['class'];
+		
+			// Insert canvas and remove meter.
+			$(element).before(canvas)
+				   .hide();
+				   
+			return canvas;
+		}
+		
+		function drawDialFace(context, diameter, settings) {
+			// Draw face
+			context.fillStyle = settings['dialFaceColor'];
+			context.strokeStyle = settings['dialOutlineColor'];
+			context.lineWidth = 1;
+			context.beginPath();
+			context.arc(
+				settings['width'] / 2, 
+				settings['height'] / 2, 
+				((diameter - 2) / 2) - 1, 
+				0,
+				Math.PI * 2, 
+				false
+			);
+			context.closePath();
+			context.fill();
+			context.stroke();
+		}
+		
+		function drawScaleArc(context, radius, width, smallestDimension, pointerRotationPointX, pointerRotationPointY, minValueRotationAngle, maxValueRotationAngle, settings) {
+			context.translate(pointerRotationPointX, pointerRotationPointY);  // Move origin to rotation point
+		
+			if (settings['drawDialFace'] && !settings['image']) {
+				context.strokeStyle = settings['scaleRangeColor'];
+				context.lineWidth = width;
+				context.beginPath();
+				context.arc(
+					0,
+					0,
+					radius,
+					minValueRotationAngle, 
+					maxValueRotationAngle,
+					false
+				);
+				context.stroke();
+				context.closePath();
+			}
+		}
+		
+		function drawNeedle(context, length, settings) {
+			context.strokeStyle = settings['pointerColor'];
+			context.lineJoin = "round";
+			context.lineWidth = 4;
+			context.beginPath()
+			context.moveTo(0, 0);  // Get into middle
+			context.lineTo(length, 0);
+			context.closePath();
+			context.stroke();
+		}
+		
+		function drawImageNeedle(context, image, largestDimension, settings) {
+			context.drawImage(img, 
+				0, settings['height'] + 1,  // sx, sy
+				(largestDimension * 2), largestDimension,  // sw, sh
+				0-largestDimension, 0-(largestDimension/2),  //dx, dy
+				(largestDimension * 2), largestDimension  // dw, dh
+			);
+		}
+		
+		function drawSpindle(context, pointerRotationPointX, pointerRotationPointY, smallestDimension, settings) {
+			context.fillStyle = settings['spindleColor'];
+			context.strokeStyle = settings['spindleOutlineColor'];
+			context.lineWidth = 1;
+			context.beginPath();
+			context.arc(pointerRotationPointX, pointerRotationPointY, (smallestDimension) / 12, 0, Math.PI * 2, false);
+			context.closePath();
+			context.fill();
+			context.stroke();
+		}
+		
+		function drawImageOverlay(context, img, settings) {
+			context.drawImage(img, settings['width'], 0, settings['width'], settings['height'], 0, 0, settings['width'], settings['height']);
+		}		
+		
 		function process(elements, img) {
 	
 			toReturn = elements.each(function(){
@@ -71,15 +160,7 @@
 					settings['height'] : 
 					settings['width'];
 		
-				// Create canvas
-				canvas = document.createElement('canvas');
-				canvas.setAttribute('width', settings['width']);
-				canvas.setAttribute('height', settings['height']);
-				canvas.className = settings['class'];
-			
-				// Insert canvas and remove meter.
-				$(this).before(canvas)
-				       .hide();
+				var canvas = insertCanvas(this, settings);
 					   
 				// EXCANVAS
 				if (typeof(G_vmlCanvasManager) != 'undefined')
@@ -100,55 +181,22 @@
 				var pointerRotationPointY = 
 					_ifNull(settings['pointerRotationPoint']['y'], settings['height'] / 2);
 			
-				var scaleWidth = (smallestDimension / 8);
-				var scaleDistanceFromEdge = 1 + (scaleWidth * 2);
 				if (settings['drawDialFace'] && !settings['image']) {
-					// Draw face
-					context.fillStyle = settings['dialFaceColor'];
-					context.strokeStyle = settings['dialOutlineColor'];
-					context.lineWidth = 1;
-					context.beginPath();
-					context.arc(
-						settings['width'] / 2, 
-						settings['height'] / 2, 
-						((smallestDimension - 2) / 2) - 1, 
-						0,
-						Math.PI * 2, 
-						false
-					);
-					context.closePath();
-					context.fill();
-					context.stroke();
+					drawDialFace(context, smallestDimension, settings);
 				} else if (settings['image']) {
 					context.drawImage(img, 0, 0, settings['width'], settings['height'], 0, 0, settings['width'], settings['height']);
 				}
 			
 				// Draw area scale arc thing
+				var scaleWidth = (smallestDimension / 8);
+				var scaleDistanceFromEdge = 1 + (scaleWidth * 2);
 				var scaleArcRadius = settings['scaleArcRadius'];
 				if (scaleArcRadius == null) {
 					scaleArcRadius = (smallestDimension - scaleDistanceFromEdge) / 2;
 				} else {
 					scaleArcRadius -= (scaleWidth / 2);
 				}
-			
-				context.translate(pointerRotationPointX, pointerRotationPointY);  // Move origin to rotation point
-			
-				if (settings['drawDialFace'] && !settings['image']) {
-					context.strokeStyle = settings['scaleRangeColor'];
-					context.lineWidth = scaleWidth;
-					context.beginPath();
-					context.arc(
-						0,//settings['size'] / 2, 
-						0,//settings['size'] / 2, 
-						//(settings['size'] - scaleDistanceFromEdge) / 2,  // radius
-						scaleArcRadius,
-						minValueRotationAngle, 
-						maxValueRotationAngle,
-						false
-					);
-					context.stroke();
-					context.closePath();
-				}
+				drawScaleArc(context, scaleArcRadius, scaleWidth, smallestDimension, pointerRotationPointX, pointerRotationPointY, minValueRotationAngle, maxValueRotationAngle, settings);
 			
 				// Calculate pointer length
 				var pointerLength = _ifNull(settings['pointerLength'], scaleArcRadius);
@@ -156,27 +204,12 @@
 				// Rotate for needle
 				var currentValueRotationAngle = ((value - min) * (maxValueRotationAngle - minValueRotationAngle) / (max - min) + minValueRotationAngle);  // thanks to @vkornov for giving me this formula
 				
-				//context.translate(pointerRotationPointX, pointerRotationPointY);  // Move origin to rotation point
 				context.rotate(currentValueRotationAngle);  // Rotate by the appropriate angle
 			
 				if (!settings['image']) {
-					context.strokeStyle = settings['pointerColor'];
-					context.lineJoin = "round";
-					context.lineWidth = 4;
-					context.beginPath()
-					context.moveTo(0, 0);  // Get into middle
-					context.lineTo(pointerLength, 0);
-					context.closePath();
-					context.stroke();
+					drawNeedle(context, pointerLength, settings);
 				} else {
-					// image needle
-					context.drawImage(img, 
-						0, settings['height'] + 1,  // sx, sy
-						//(settings['width'] * 2), settings['height'],  // sw, sh
-						(largestDimension * 2), largestDimension,  // sw, sh
-						0-largestDimension, 0-(largestDimension/2),  //dx, dy
-						(largestDimension * 2), largestDimension  // dw, dh
-					);
+					drawImageNeedle(context, img, largestDimension, settings);
 				}
 			
 				// reset all transformations
@@ -185,22 +218,14 @@
 				
 				// Draw middle bit
 				if (settings['drawSpindle'] && !settings['image']) {
-					context.fillStyle = settings['spindleColor'];
-					context.strokeStyle = settings['spindleOutlineColor'];
-					context.lineWidth = 1;
-					context.beginPath();
-					context.arc(pointerRotationPointX, pointerRotationPointY, (smallestDimension) / 12, 0, Math.PI * 2, false);
-					context.closePath();
-					context.fill();
-					context.stroke();
+					drawSpindle(context, pointerRotationPointX, pointerRotationPointY, smallestDimension, settings);
 				} else if (settings['image']) {
 					// draw overlay
-					context.drawImage(img, settings['width'], 0, settings['width'], settings['height'], 0, 0, settings['width'], settings['height']);
+					drawImageOverlay(context, img, settings);
 				}
 			});
 		
-		}
-	
+		}	
 	
 		// Helper methods
 		function _ifNull(value, ifNullResult) {
