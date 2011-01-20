@@ -12,7 +12,7 @@ body {
 }
 
 ::selection {
-	background: rgb(125, 172, 191);
+	background: rgb(86, 141, 171);
 	color: rgb(255, 255, 255);
 	-webkit-text-shadow: none !important;
 	text-shadow: none !important;
@@ -70,6 +70,10 @@ section#demos {
 section#demos img {
 	background-image: url(bg-squares.png);
 	border: solid 8px #E0DFD4;
+}
+
+#html5 {
+	text-align: center;
 }
 
 code {
